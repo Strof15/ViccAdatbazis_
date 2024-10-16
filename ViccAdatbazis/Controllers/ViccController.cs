@@ -109,17 +109,25 @@ namespace ViccAdatbazis.Controllers
             return Ok(JsonSerializer.Serialize(valasz));
         }
 
+
         //DisLike
         [Route("{id}/dislike")]
         [HttpPatch("{id}")]
-        public async Task<ActionResult> NemTetszik(int id)
+        public async Task<ActionResult<string>> NemTetszik(int id)
         {
             var vicc = _context.Viccek.Find(id);
             if (vicc == null) { return NotFound(); }
             vicc.NemTetszik++;
             _context.Entry(vicc).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return NoContent();
+            var valasz = new
+            {
+                tdb = vicc.NemTetszik
+            };
+            return Ok(JsonSerializer.Serialize(valasz));
         }
+
+
+
     }
 }
